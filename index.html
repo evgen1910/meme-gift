@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* Чтобы текст не выделялся как на картинке, но можно оставить */
+            user-select: none;
         }
 
         body {
@@ -29,11 +29,11 @@
             height: 100vh;
             width: 100%;
             background: black;
-            scrollbar-width: none; /* Firefox скрыть полосу */
-            -ms-overflow-style: none; /* IE */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
         .gift-container::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
+            display: none;
         }
 
         /* Каждая страница — полноэкранный блок */
@@ -88,33 +88,39 @@
         /* Страницы с мемами */
         .meme-screen {
             justify-content: center;
+            align-items: center;
             background: #0a0a0a;
+            padding: 20px;
         }
+        
         .meme-card {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             width: 100%;
-            max-width: 500px;
+            max-width: 100%;
             height: auto;
-            background: #111;
-            border-radius: 32px;
-            padding: 20px 16px 24px 16px;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
+            border: none;
         }
+        
         .meme-image {
             width: 100%;
-            max-height: 70vh;
+            height: auto;
+            max-height: 85vh;
             object-fit: contain;
-            border-radius: 24px;
+            border-radius: 16px;
             background: #000;
             display: block;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
+        
         .counter {
-            margin-top: 24px;
+            margin-top: 16px;
             font-size: 0.9rem;
             font-weight: 500;
             background: rgba(255,255,255,0.1);
@@ -123,8 +129,9 @@
             color: #ddd;
             letter-spacing: 0.5px;
         }
+        
         .swipe-hint {
-            margin-top: 16px;
+            margin-top: 12px;
             font-size: 0.75rem;
             color: #666;
             display: flex;
@@ -136,7 +143,9 @@
         .final-screen {
             background: #000000;
             text-align: center;
+            justify-content: center;
         }
+        
         .final-text {
             font-size: clamp(1.6rem, 7vw, 2.8rem);
             font-weight: 500;
@@ -149,12 +158,13 @@
             border-radius: 48px;
             backdrop-filter: blur(4px);
         }
+        
         .emoji-big {
             font-size: 3.5rem;
             margin-bottom: 16px;
         }
 
-        /* навигация точки/пагинация (по желанию) */
+        /* навигация точки/пагинация */
         .nav-dots {
             position: fixed;
             bottom: 20px;
@@ -166,6 +176,7 @@
             z-index: 20;
             pointer-events: none;
         }
+        
         .dot {
             width: 6px;
             height: 6px;
@@ -175,13 +186,18 @@
             pointer-events: auto;
             cursor: pointer;
         }
+        
         .dot.active {
             width: 24px;
             background: white;
         }
+        
         @media (max-width: 700px) {
             .nav-dots {
                 bottom: 12px;
+            }
+            .meme-image {
+                border-radius: 12px;
             }
         }
     </style>
@@ -189,7 +205,7 @@
 <body>
 
 <div class="gift-container" id="giftContainer">
-    <!-- ТИТУЛЬНИК: черный экран с определенным текстом -->
+    <!-- ТИТУЛЬНИК -->
     <div class="slide title-screen">
         <div class="title-text">
             ⚡ ТВОЙ ПОДАРОК на 1 апреля ⚡<br>
@@ -203,10 +219,10 @@
         </div>
     </div>
 
-    <!-- Здесь динамически вставятся 40 слайдов с мемами (через js) -->
+    <!-- Сюда вставятся мемы -->
     <div id="memesDynamic"></div>
 
-    <!-- ФИНАЛЬНЫЙ ЭКРАН: текст в конце -->
+    <!-- ФИНАЛЬНЫЙ ЭКРАН -->
     <div class="slide final-screen">
         <div class="emoji-big">🎁✨</div>
         <div class="final-text">
@@ -241,7 +257,7 @@
         
         slide.innerHTML = `
             <div class="meme-card">
-                <img class="meme-image" src="${imagePath}" alt="meme ${memeNumber}" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=Мем+${memeNumber}+не+найден&bg=111&fg=white'; this.onerror=null;">
+                <img class="meme-image" src="${imagePath}" alt="meme ${memeNumber}" loading="lazy" onerror="this.src='https://placehold.co/800x800?text=Мем+${memeNumber}+не+найден&bg=111&fg=white'; this.onerror=null;">
                 <div class="counter">
                     📸 ${memeNumber} / ${TOTAL_MEMES}
                 </div>
@@ -263,7 +279,7 @@
         memesDynamicContainer.appendChild(fragment);
     }
     
-    // Обновление точек навигации (индикация активного слайда)
+    // Обновление точек навигации
     function updateActiveDot() {
         const containerEl = document.getElementById('giftContainer');
         if (!containerEl) return;
